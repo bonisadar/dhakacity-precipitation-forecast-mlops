@@ -15,12 +15,25 @@ push: null
 # pull section allows you to provide instructions for cloning this project in remote locations
 pull:
 - prefect.deployments.steps.git_clone:
-    repository: https://github.com/bonisadar/Dhaka_city_precipitation_forecast.git
+    repository: https://github.com/bonisadar/dhakacity-precipitation-forecast-mlops 
     branch: master
     access_token: null
 
 # the deployments section allows you to provide configuration for deploying flows
 deployments:
+- name: openmeteo-api-data-download
+  version: test-1
+  tags: []
+  description: null
+  schedule: {}
+  flow_name: fetch_and_upload_flow()
+  entrypoint: fetch_and_uploag_data.py:fetch_and_upload_flow
+  parameters: {}
+  work_pool:
+    name: first_worker
+    work_queue_name: default
+    job_variables: {}
+
 - name: dhaka-precipitation-forecast
   version: test-1
   tags: []
@@ -38,10 +51,14 @@ deployments:
 - name: drift-monitoring-deployment
   version: v1
   tags: ["monitoring"]
-  schedule: {}
+  schedule:
+    cron: "0 17 * * *"         # 11 PM Dhaka is 5 PM UTC
+    timezone: "Asia/Dhaka"     
   flow_name: drift_monitoring_flow
   entrypoint: monitor_drift.py:drift_monitoring_flow
   work_pool:
     name: first_worker
     work_queue_name: default
     job_variables: {}
+    
+
