@@ -57,7 +57,7 @@ def fetch_last_month_y_pred(experiment_name="dhaka_city_precipitation_forecast_v
         return None
     
     # Get runs sorted by start time descending
-    runs = client.search_runs(experiment_ids=[str(experiment.experiment_id)],
+    runs = client.search_runs(experiment_ids=[experiment.experiment_id],
                               order_by=["start_time DESC"],
                               max_results=2)
 
